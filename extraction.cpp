@@ -165,6 +165,19 @@ int Extraction::loadInput(QMap<QString, PREPROCESSING_RESULTS> preprocessingResu
 
     return 1;
 }
+//batch mode load
+int Extraction::loadInput(BATCH_RESULTS batch){
+    if (this->extractionIsRunning) {
+        this->extractionError(10);
+        return -1;
+    }
+    this->input.batch=batch;
+    this->input.quality = 100;
+    this->input.loaded = true;
+
+    return 1;
+}
+
 
 void Extraction::run()
 {
@@ -291,4 +304,8 @@ void Extraction::extractionError(int errorCode)
      */
 
     emit this->extractionErrorSignal(errorCode);
+}
+
+void Extraction::setBatchMode(bool enable){
+    this->batchMode=enable;
 }

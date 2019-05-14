@@ -68,3 +68,11 @@ DEPENDPATH += /usr/include
 unix:!macx: LIBS += -L/usr/lib/ -lprotobuf
 INCLUDEPATH += /usr/include
 DEPENDPATH += /usr/include
+
+unix:!macx: LIBS += -L/usr/lib/ -lopencv_core -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc
+INCLUDEPATH += /usr/include/opencv4
+
+
+unix:!macx: LIBS += -L/usr/lib/ -lafcuda
+INCLUDEPATH += /usr/include
+DEPENDPATH += /usr/include

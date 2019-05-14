@@ -34,6 +34,7 @@ public:
     int loadInput(cv::Mat imgOriginal, cv::Mat imgSkeleton, cv::Mat orientationMap, int fpQuality = 100, cv::Mat qualityMap = cv::Mat(0,0,CV_8UC1), cv::Mat imgSkeletonInverted = cv::Mat(0,0,CV_8UC1));
     int loadInput(PREPROCESSING_RESULTS preprocessingResults);
     int loadInput(QMap<QString, PREPROCESSING_RESULTS> preprocessingResults);
+    int loadInput(BATCH_RESULTS batch);
 
     void run();
 
@@ -41,7 +42,7 @@ public:
     int setExtractionParams(CAFFE_FILES extractionFiles, int extractionBlockSize);
     int setFeatures(bool useISOConverter, bool useOrientationFixer = true, bool useVariableBlockSize = false);
     int setCPUOnly(bool enabled);
-
+    void setBatchMode(bool enable);
 
 private:
     CrossingNumber crossingNumber;
@@ -52,7 +53,7 @@ private:
     QTime timer;
 
     bool extractionIsRunning;
-
+    bool batchMode;
     // INPUT
     EXTRACTION_INPUT input;
     EXTRACTION_PARAMS extractionParams;
@@ -71,6 +72,7 @@ private:
 
     // PRIVATE FUNCTIONS
     void startExtraction(const PREPROCESSING_RESULTS &input);
+    void startExtractionBatch(const BATCH_RESULTS input);
     void cleanResults();
     void cleanSequenceResults();
     void cleanDurations();

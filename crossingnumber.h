@@ -14,14 +14,21 @@ public:
     void findMinutiae();
     void clean();
 
-    QVector<MINUTIA> getMinutiae() const;
+    void findMinutiaeInBatch(QVector<cv::Mat> skeletons,QVector<cv::Mat> oMap);
+    double getBatchTime();
 
+    QVector<MINUTIA> getMinutiae() const;
+    QVector<MINUTIA> getMinutiaeFromMap(int index);
 private:
 
     cv::Mat imgSkeleton;
     PREPROCESSING_RESULTS input;
 
+    QVector<QVector<MINUTIA>> minutiaeMap;
     QVector<MINUTIA> minutiae;
+    double batchCNTime;
+    af::array findInSingleSkeleton(af::array skeleton);
+    QVector<MINUTIA> matrixToVector(af::array CN,cv::Mat oMap);
 };
 
 #endif // CROSSINGNUMBER_H

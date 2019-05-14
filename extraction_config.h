@@ -18,6 +18,9 @@
 #include <string>
 #include <bitset>
 
+//ArrayFire
+#include "arrayfire.h"
+
 #ifndef MINUTIA_DEFINED
 typedef struct minutia {
     QPoint xy;
@@ -50,8 +53,20 @@ typedef struct preprocessing_results {
 #define PREPROCESSING_RESULTS_DEFINED
 #endif
 
+typedef struct batchPreprocessingResults{
+    QVector<cv::Mat> original;
+    QVector<cv::Mat> enhanced;
+    QVector<cv::Mat> mask;
+    QVector<cv::Mat> oMap;
+    QVector<cv::Mat> Gabor;
+    QVector<cv::Mat> binary;
+    QVector<cv::Mat> skeleton;
+} BATCH_RESULTS;
+
 typedef struct extraction_input {
     bool isSequence;
+    bool batchMode;
+    BATCH_RESULTS batch;
     PREPROCESSING_RESULTS one;
     QMap<QString, PREPROCESSING_RESULTS> sequence;
     QVector<QString> keys;

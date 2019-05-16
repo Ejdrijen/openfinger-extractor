@@ -87,8 +87,8 @@ void CrossingNumber::findMinutiaeInBatch(QVector<cv::Mat> skeletons,QVector<cv::
     //gfor + meranie casu
     af::timer::start();
     gfor(af::seq k,matrix.dims(2)){
-        matrix(af::span,af::span,k)=this->findInSingleSkeleton(matrix(af::span,af::span,k));
-    }//vyhladanie markantov v obraze
+        matrix(af::span,af::span,k)=this->findInSingleSkeleton(matrix(af::span,af::span,k));//vyhladanie markantov v obraze
+    }
     this->batchCNTime=af::timer::stop();
 
     for (int i=0;i<matrix.dims(2);i++) {
@@ -125,4 +125,8 @@ QVector<MINUTIA> CrossingNumber::matrixToVector(af::array CN, cv::Mat oMap){
         }
     }
     return minutiae;
+}
+
+QVector<QVector<MINUTIA>> CrossingNumber::getMinutiaeMap(){
+    return this->minutiaeMap;
 }

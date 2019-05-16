@@ -23,6 +23,14 @@ typedef struct extraction_results {
     unsigned char * minutiaeISO;
 } EXTRACTION_RESULTS;
 
+typedef struct extraction_batch_results {
+    QVector<QVector<MINUTIA>> minutiaeCN;
+    QVector<QVector<MINUTIA>> minutiaePredicted;
+    QVector<QVector<MINUTIA>> minutiaePredictedFixed;
+    QVector<unsigned char *> minutiaeISO;
+} EXTRACTION_BATCH_RESULTS;
+
+
 class EXTRACTIONSHARED_EXPORT Extraction : public QThread
 {
     Q_OBJECT
@@ -42,8 +50,8 @@ public:
     int setExtractionParams(CAFFE_FILES extractionFiles, int extractionBlockSize);
     int setFeatures(bool useISOConverter, bool useOrientationFixer = true, bool useVariableBlockSize = false);
     int setCPUOnly(bool enabled);
+    //Batch mode
     void setBatchMode(bool enable);
-
 private:
     CrossingNumber crossingNumber;
     OrientationFixer orientationFixer;
@@ -65,6 +73,7 @@ private:
     // OUTPUT
     EXTRACTION_DURATIONS durations;
     EXTRACTION_RESULTS results;
+    EXTRACTION_BATCH_RESULTS batchResults;
     QMap<QString, EXTRACTION_RESULTS> resultsMap;
     QMap<QString, QVector<MINUTIA>> resultsMinutiaeMap;
     QMap<QString, unsigned char*> resultsISOMap;
@@ -88,6 +97,8 @@ signals:
     void extractionSequenceDoneSignal(QMap<QString, EXTRACTION_RESULTS> results);
     void extractionSequenceDoneSignal(QMap<QString, QVector<MINUTIA>> minutiaeMap);
     void extractionSequenceDoneSignal(QMap<QString, unsigned char *> minutiaeISO);
+
+    void extractionBatchDoneSignal(EXTRACTION_BATCH_RESULTS results);
 
     void extractionDurationsSignal(EXTRACTION_DURATIONS durations);
     void extractionProgressSignal(int progress);

@@ -36,6 +36,7 @@ HEADERS +=\
     extraction.h \
     extraction_global.h \
     crossingnumber.h \
+    helper.h \
     neuralchecker.h \
     isoconverter.h \
     orientationfixer.h \

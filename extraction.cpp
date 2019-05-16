@@ -307,5 +307,38 @@ void Extraction::extractionError(int errorCode)
 }
 
 void Extraction::setBatchMode(bool enable){
-    this->batchMode=enable;
+    if(!this->extractionIsRunning){
+        this->batchMode=enable;
+    }
+    else this->extractionError(10);
+}
+
+
+void Extraction::startExtractionBatch(const BATCH_RESULTS input){
+    //paralelCN
+    this->crossingNumber.findMinutiaeInBatch(input.skeleton,input.oMap);
+    this->batchResults.minutiaeCN=this->crossingNumber.getMinutiaeMap();
+    this->durations.crossingNumber=this->crossingNumber.getBatchTime() ;
+
+    //neural checker
+    //load caffe models
+        this->neuralChecker.loadModel(this->extractionParams.caffeFiles);
+        this->extractionParams.modelLoaded = true;
+    //run checker for every image in batch
+    for(int i=0;i<this->batchResults.minutiaeCN.size();i++){
+        this->neuralCheckerParams.minutiaCN=&this->batchResults.minutiaeCN(i);
+        this->neuralChecker.setParams(input.original(i),this->neuralCheckerParams);
+        this->timer.start();
+        this->neuralChecker.check();
+        this->durations.neuralChecker+=this->timer.elapsed();
+        this->batchResults.minutiaePredicted.push_back(this->neuralChecker.getCheckedMinutiae());
+    }
+    //orientation fixer ? -> need skeleton from inverted binary image
+
+
+    this->extractionIsRunning=false;
+    emit extractionBatchDoneSignal(this->batchResults);
+
+
+
 }

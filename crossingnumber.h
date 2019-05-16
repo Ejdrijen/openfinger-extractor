@@ -18,6 +18,7 @@ public:
     double getBatchTime();
 
     QVector<MINUTIA> getMinutiae() const;
+    QVector<QVector<MINUTIA>> getMinutiaeMap();
     QVector<MINUTIA> getMinutiaeFromMap(int index);
 private:
 

@@ -333,8 +333,6 @@ void Extraction::startExtractionBatch(const BATCH_RESULTS input){
         this->durations.neuralChecker+=this->timer.elapsed();
         this->batchResults.minutiaePredicted.push_back(this->neuralChecker.getCheckedMinutiae());
     }
-    //orientation fixer ? -> need skeleton from inverted binary image
-
 
     this->extractionIsRunning=false;
     emit extractionBatchDoneSignal(this->batchResults);

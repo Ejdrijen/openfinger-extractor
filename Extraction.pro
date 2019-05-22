@@ -49,14 +49,14 @@ unix {
 }
 
 #CUDA
-unix:!macx: LIBS += -L/opt/cuda/lib64/ -lcudart
+unix:!macx: LIBS += -L/opt/cuda/lib/ -lcudart
 INCLUDEPATH += /opt/cuda/include
 DEPENDPATH += /opt/cuda/include
 
 #Caffe
-unix:!macx: LIBS += -L/usr/local/lib64/ -lcaffe
-INCLUDEPATH += /usr/local/include
-DEPENDPATH += /usr/local/include
+unix:!macx: LIBS += -L/usr/lib/ -lcaffe
+INCLUDEPATH += /usr/include/caffe
+DEPENDPATH += /usr/include/caffe
 
 unix:!macx: LIBS += -L/usr/lib/ -lboost_system
 INCLUDEPATH += /usr/include

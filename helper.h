@@ -1,7 +1,38 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-#include "preprocessing_config.h"
+//Qt
+#include <QObject>
+#include <QDebug>
+#include <QMetaType>
+#include <QtMath>
+#include <QThread>
+#include <QVector>
+#include <QTime>
+#include <QString>
+#include <QColor>
+#include <QPainter>
+#include <QDir>
+#include <QProcess>
+#include <QFileInfo>
+
+//std
+#include <iostream>
+#include <stdio.h>
+#include <vector>
+#include <numeric>
+#include <fstream>
+#include <exception>
+#include <algorithm>
+#include <math.h>
+#include <deque>
+
+// ArrayFire
+#include "arrayfire.h"
+#include "af/macros.h"
+
+//OpenCV
+#include "opencv2/opencv.hpp"
 
 #undef max
 #undef min

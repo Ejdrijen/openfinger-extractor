@@ -53,6 +53,7 @@ typedef struct preprocessing_results {
 #define PREPROCESSING_RESULTS_DEFINED
 #endif
 
+#ifndef BATCH_RESULTS_DEFINED
 typedef struct batchPreprocessingResults{
     QVector<cv::Mat> original;
     QVector<cv::Mat> enhanced;
@@ -62,6 +63,8 @@ typedef struct batchPreprocessingResults{
     QVector<cv::Mat> binary;
     QVector<cv::Mat> skeleton;
 } BATCH_RESULTS;
+#define BATCH_RESULTS_DEFINED
+#endif
 
 typedef struct extraction_input {
     bool isSequence;

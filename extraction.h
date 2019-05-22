@@ -26,8 +26,6 @@ typedef struct extraction_results {
 typedef struct extraction_batch_results {
     QVector<QVector<MINUTIA>> minutiaeCN;
     QVector<QVector<MINUTIA>> minutiaePredicted;
-    QVector<QVector<MINUTIA>> minutiaePredictedFixed;
-    QVector<unsigned char *> minutiaeISO;
 } EXTRACTION_BATCH_RESULTS;
 
 
@@ -45,6 +43,7 @@ public:
     int loadInput(BATCH_RESULTS batch);
 
     void run();
+    void startExtractionBatch(const BATCH_RESULTS input);
 
     // OPTIONAL
     int setExtractionParams(CAFFE_FILES extractionFiles, int extractionBlockSize);
@@ -81,7 +80,7 @@ private:
 
     // PRIVATE FUNCTIONS
     void startExtraction(const PREPROCESSING_RESULTS &input);
-    void startExtractionBatch(const BATCH_RESULTS input);
+
     void cleanResults();
     void cleanSequenceResults();
     void cleanDurations();

@@ -1,4 +1,5 @@
 #include "extraction.h"
+#include <QDebug>
 
 Extraction::Extraction()
 {
@@ -315,25 +316,35 @@ void Extraction::setBatchMode(bool enable){
 
 
 void Extraction::startExtractionBatch(const BATCH_RESULTS input){
+    qDebug() << "paralel CN";
     //paralelCN
+    try{
     this->crossingNumber.findMinutiaeInBatch(input.skeleton,input.oMap);
     this->batchResults.minutiaeCN=this->crossingNumber.getMinutiaeMap();
     this->durations.crossingNumber=this->crossingNumber.getBatchTime() ;
-
+    }catch(af::exception e){
+        qDebug() << "exception in paralel CN " << e.what();
+    }
+    qDebug() << "neural checker";
     //neural checker
     //load caffe models
         this->neuralChecker.loadModel(this->extractionParams.caffeFiles);
         this->extractionParams.modelLoaded = true;
     //run checker for every image in batch
     for(int i=0;i<this->batchResults.minutiaeCN.size();i++){
-        this->neuralCheckerParams.minutiaCN=&this->batchResults.minutiaeCN(i);
-        this->neuralChecker.setParams(input.original(i),this->neuralCheckerParams);
+        qDebug() << i;
+        QVector<MINUTIA> cn = this->batchResults.minutiaeCN[i];
+        cv::Mat original=input.original[i];
+        this->results.minutiaeCN=cn;
+        this->neuralChecker.setParams(original,this->neuralCheckerParams);
+//        this->results.minutiaeCN=this->batchResults.minutiaeCN(i);
+//        this->neuralChecker.setParams(input.original(i),this->neuralCheckerParams);
         this->timer.start();
         this->neuralChecker.check();
         this->durations.neuralChecker+=this->timer.elapsed();
         this->batchResults.minutiaePredicted.push_back(this->neuralChecker.getCheckedMinutiae());
     }
-
+    qDebug() << "extraction done";
     this->extractionIsRunning=false;
     emit extractionBatchDoneSignal(this->batchResults);
 

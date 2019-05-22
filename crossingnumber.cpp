@@ -1,5 +1,6 @@
 #include "crossingnumber.h"
-
+#include <QDebug>
+#include "helper.h"
 CrossingNumber::CrossingNumber()
 {
 
@@ -70,7 +71,9 @@ af::array CrossingNumber::findInSingleSkeleton(af::array skeleton){
                                        af::abs(skeleton(y-1,x+1)-skeleton(y-1,x))+
                                        af::abs(skeleton(y-1,x)-skeleton(y-1,x-1))
                                         )/2)*skeleton(y,x);
+
         }
+        qDebug() << "stlpec " << x;
     }
    return MinutiaMatrix.as(u8);
 }
@@ -78,19 +81,22 @@ af::array CrossingNumber::findInSingleSkeleton(af::array skeleton){
 void CrossingNumber::findMinutiaeInBatch(QVector<cv::Mat> skeletons,QVector<cv::Mat> oMap){
     //prevod na array
     af::array matrix(skeletons[0].rows,skeletons[0].cols,skeletons.size()); // array of skeletons
-    for (int i=0;i<skeletons.size();i++) {
-        cv::Mat helperMat;
-        cv::transpose(skeletons[i],helperMat);
-        matrix(af::span,af::span,i)=af::array(skeletons[i].rows,skeletons[i].cols,helperMat.data).as(u8);
-    }//created array from QVector
 
-    //gfor + meranie casu
+    int imageHeight=matrix.dims(0);
+    matrix=Helper::QVectorMat_2_Array(skeletons,false);
+    matrix=Helper::Array3D_2_Array2D(matrix);
+
+
+    try{
     af::timer::start();
-    gfor(af::seq k,matrix.dims(2)){
-        matrix(af::span,af::span,k)=this->findInSingleSkeleton(matrix(af::span,af::span,k));//vyhladanie markantov v obraze
-    }
+    matrix=this->findInSingleSkeleton(matrix);
     this->batchCNTime=af::timer::stop();
+    }catch(af::exception e){
+        qDebug() << "CN failure";
+    }
 
+
+    matrix=Helper::Array2D_2_Array3D(matrix,imageHeight);
     for (int i=0;i<matrix.dims(2);i++) {
         this->minutiaeMap.push_back(this->matrixToVector(matrix(af::span,af::span,i),oMap[i]));
     }//najdene markanty do QVector -> minutiaeMap

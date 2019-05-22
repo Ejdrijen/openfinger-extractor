@@ -347,6 +347,7 @@ void Extraction::startExtractionBatch(const BATCH_RESULTS input){
     qDebug() << "extraction done";
     this->extractionIsRunning=false;
     emit extractionBatchDoneSignal(this->batchResults);
+    emit extractionDurationsSignal(this->durations);
 
 
 
